@@ -13,7 +13,7 @@ io.on('connection', (socket) => {
     socket.on('set nickname', (nickname) => {
         users[socket.id] = nickname;
         io.emit('user list', Object.values(users));
-        socket.broadcast.emit('chat message', `${nickname} has joined the chat.`);
+        socket.broadcast.emit('chat message', { user: 'System', msg: `${nickname} has joined the chat.` });
     });
 
     socket.on('chat message', (msg) => {
@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        socket.broadcast.emit('chat message', `${users[socket.id]} has left the chat.`);
+        socket.broadcast.emit('chat message', { user: 'System', msg: `${users[socket.id]} has left the chat.` });
         delete users[socket.id];
         io.emit('user list', Object.values(users));
     });
